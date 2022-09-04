@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <meta charset="utf8">
+    <title>Organize Open Houses from Zillow</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script type="text/javascript" src="/static/app.js"></script>
+  </head>
+
+  <body>
+    <div class="listings">
+      <div class="input">
+        <form>
+          <label for="url">Enter a link from Zillow:</label>
+          <input type="url" id="url" name="url"
+            placeholder="https://www.zillow.com/homedetails/123-Main-St-Seattle-WA-98109/1234567_zpid/">
+          <div class="u-alignRight">
+            <button type="submit">Add to list</button>
+          </div>
+        </form>
+      </div>
+
+      {{range .Listings}}
+      <div class="listing">
+        <img class="photo" src="{{.PhotoUrl}}">
+        <div class="info">
+          <h4>{{.Address.Value}}</h4>
+          <p>{{wrapPrice .Description}}</p>
+          {{range .OpenHouses}}
+          <p>
+            {{.StartDate.Format "Monday, January 2"}}
+            {{.StartDate.Format "3PM"}}&mdash;{{.EndDate.Format "3PM"}}
+          </p>
+          {{else}}
+          <p><span class="u-warning">No open houses</span></p>
+          {{end}}
+          <p>
+            {{if .CanonicalURL}}
+            <a href="{{.CanonicalURL}}">Zillow</a>
+            {{else}}
+            <a href="{{.URL}}">Zillow</a>
+            {{end}}
+            &nbsp;|&nbsp;
+            <a href="">Map</a>
+          </p>
+        </div>
+      </div>
+      {{else}}
+      <p>No listings yet. Try adding one above.</p>
+      {{end}}
+
+      <div class="footer">
+        Share this list: {{.ListId}}
+      </div>
+    </div>
+  </body>
+</html>
